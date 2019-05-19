@@ -48,8 +48,11 @@ public class EchoServer {
                 Stream<String> stream = Stream.generate(socketInput);   //reading from client
                 stream
                     .map(s -> {
-                        System.out.println("Client request: " + s);     
-                        out.println(s); //add .toUpperCase here     //sending back to client
+                        if(s!=null)
+                        {
+                        System.out.println("Client request: " + s);
+                        out.println(s.toUpperCase()); //add .toUpperCase here     //sending back to client
+                        }
                         return s;
                 })
                 .allMatch(s -> s != null);
