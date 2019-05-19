@@ -37,17 +37,29 @@ public class EchoClient {
                     clientSocket.getOutputStream(), true);
                 BufferedReader br = new BufferedReader(
                     new InputStreamReader(
-                    clientSocket.getInputStream()))) {
+                    clientSocket.getInputStream()))
+                    ){
                         System.out.println("Connected to server");
                         Scanner scanner = new Scanner(System.in);
                         
                         Supplier<String> scannerInput = () -> scanner.nextLine();
+                        Supplier<String> socketInput = () -> {
+                        try {
+                            return br.readLine();
+                        } catch (IOException ex) {
+                            return null;
+                        }
+                            };
                         System.out.print("Enter text: ");
-                        Stream.generate(scannerInput)
+                        Stream.generate(scannerInput)               //reading user input
                             .map(s -> {
-                                out.println(s);
-                                System.out.println("Server response: " + s);
+                                out.println(s);                     //sending it to the server
+                                System.out.println("Server response: "+ socketInput.get());    //printing server message
+                                
+                           if(!"quit".equalsIgnoreCase(s))
+                           {
                                 System.out.print("Enter text: ");
+                           }
                             return s;
                         })
                         .allMatch(s -> !"quit".equalsIgnoreCase(s));

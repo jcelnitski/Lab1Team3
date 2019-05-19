@@ -37,7 +37,6 @@ public class EchoServer {
                 clientSocket.getInputStream()));
                 PrintWriter out = new PrintWriter(
                 clientSocket.getOutputStream(), true)) {
-
                 Supplier<String> socketInput = () -> {
                     try {
                         return br.readLine();
@@ -46,11 +45,11 @@ public class EchoServer {
                     }
                 };
                 
-                Stream<String> stream = Stream.generate(socketInput);
+                Stream<String> stream = Stream.generate(socketInput);   //reading from client
                 stream
                     .map(s -> {
-                        System.out.println("Client request: " + s);
-                        out.println(s);
+                        System.out.println("Client request: " + s);     
+                        out.println(s); //add .toUpperCase here     //sending back to client
                         return s;
                 })
                 .allMatch(s -> s != null);
